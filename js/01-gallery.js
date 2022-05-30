@@ -1,7 +1,7 @@
 import { galleryItems } from './gallery-items.js';
 
 // Change code below this line
-
+let massage = "";
 const gallery = document.querySelector(".gallery");
 function createImg(el) {
    const step = el.map(({ preview, original, description }) => {
@@ -22,16 +22,27 @@ gallery.insertAdjacentHTML("afterbegin", createImg(galleryItems))
 gallery.addEventListener("click", selectedImg)
 
 function selectedImg(event) {
-    event.preventDefault();
+  event.preventDefault();
+  
     if (event.target.nodeName !== "IMG") { return }
-    const dataAtr = event.target.dataset.source
-    // modal(dataAtr)
-    const massage = basicLightbox.create(`<img src="${dataAtr}">`)
-massage.show()
+  const dataAtr = event.target.dataset.source;
+  openModal(dataAtr)
 }
-// function modal(dataAtr){
-// const massage = basicLightbox.create(`<img src="${dataAtr}">`)
-// gallery.onclick = massage.show
-// }
+function openModal(src) {
+  massage = basicLightbox.create(`<img src="${src}">`,
+    {
+    closable: false
+  }
+  )
+  massage.show();
+  window.addEventListener("keydown", modalClose);
 
-// const instance = basicLightbox.create(content)
+}
+
+function modalClose(event) {
+ 
+  if (event.code === "Escape") {
+    massage.close()
+     window.removeEventListener("keydown",modalClose)
+  }
+}
